@@ -1,8 +1,18 @@
 ﻿#include <iostream>
 #include <fstream>
 #include <string>
+#include <cctype> 
 
 enum class Gender { Male, Female, Other };
+
+bool isValidGender(char genderChar) {
+    genderChar = std::toupper(genderChar);
+    return genderChar == 'M' || genderChar == 'F' || genderChar == 'O';
+}
+
+bool isValidAge(int age) {
+    return age >= 0 && age <= 122;
+}
 
 struct Character {
     std::string name;
@@ -34,16 +44,26 @@ Character readFromCSV(std::ifstream& file) {
     char genderChar;
     file >> genderChar;
     file.ignore();
-    switch (genderChar) {
-    case 'M':
-        character.gender = Gender::Male;
-        break;
-    case 'F':
-        character.gender = Gender::Female;
-        break;
-    default:
-        character.gender = Gender::Other;
-        break;
+    if (!isValidGender(genderChar)) { 
+        std::cerr << "idc u enby now" << std::endl;
+        character.gender = Gender::Other; 
+    }
+    else {
+        switch (genderChar) {
+        case 'M':
+            character.gender = Gender::Male;
+            break;
+        case 'F':
+            character.gender = Gender::Female;
+            break;
+        default:
+            character.gender = Gender::Other;
+            break;
+        }
+    }
+    if (!isValidAge(character.age)) {
+        std::cerr << "idc u 0 y.o. now" << std::endl;
+        character.age = 0;
     }
     return character;
 }
@@ -63,7 +83,7 @@ int main() {
         writeFile.close();
     }
     else {
-        std::cerr << "cant write by" << std::endl;
+        std::cerr << "cant write bye" << std::endl;
         return 1;
     }
 
